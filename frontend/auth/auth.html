@@ -492,11 +492,21 @@ document.getElementById('login-form').addEventListener('submit', function(e) {
   },
   body: JSON.stringify({ username, password })
 })
-.then(res => {
-  if (!res.ok) throw new Error('Network response was not ok');
+.then(  async res => {
+  if (!res.ok) { 
+        const errorData = await res.json();
+        if (res.status === 403) {
+      alert('User not found or wrong password. Redirecting to register...');
+    } else {
+      throw new Error(`Unexpected error: ${res.status}`);
+    }}
   return res.json();
 })
-.then(data => console.log(data))
+.then(data => {console.log(data)
+      localStorage.setItem('token', data);
+
+window.location.href = '../home/dashboard.html';
+})
 .catch(err => console.error('Fetch error:', err));
 
     }

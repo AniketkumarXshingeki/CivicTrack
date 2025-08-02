@@ -591,8 +591,8 @@
             <div class="logo">CivicTrack</div>
             <div class="user-info">
                 <div class="user-actions">
-                    <span class="action-link">My Issues</span>
-                    <span class="action-link">Report new Issue</span>
+                    <span class="action-link" id="my-issues-link">My Issues</span>
+                    <span class="action-link" id="my-issues-link2">Report new Issue</span>
                     <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
                     <button class="logout-btn" onclick="logout()">⚙️</button>
                 </div>
@@ -774,6 +774,25 @@
                     // Implement filtering logic here
                 });
             });
+            document.getElementById('my-issues-link').addEventListener('click', function () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '../auth/auth.html';
+    } else {
+      window.location.href = '../myissues/myissues.html';
+      // Implement logic to show user's issues
+    }
+  });
+            document.getElementById('my-issues-link2').addEventListener('click', function () {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      window.location.href = '../auth/auth.html';
+    } else {
+              window.location.href = '../report/report.html';
+
+    }
+  });
+
 
             // Search functionality
             const searchInput = document.querySelector('.search-input');
