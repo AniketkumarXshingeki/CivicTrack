@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicTrack - Issue Management</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: rgba(30, 30, 30, 0.95);
+            border-radius: 15px;
+            border: 1px solid #444;
+            padding: 20px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .issue-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .issue-header {
+            margin-bottom: 15px;
+        }
+
+        .issue-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #ff8c00;
+        }
+
+        .issue-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .timestamp {
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: rgba(255, 140, 0, 0.1);
+            padding: 4px 8px;
+            border-radius: 12px;
+            border: 1px solid #ff8c00;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff8c00;
+        }
+
+        .status-text {
+            color: #ff8c00;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .reporter {
+            color: #999;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+
+        .description {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            color: #e0e0e0;
+            background: rgba(255, 140, 0, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ff8c00;
+        }
+
+        .location-section {
+            margin-bottom: 20px;
+        }
+
+        .location-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .location-title {
+            width: 100%;
+            color: #ff8c00;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .location-address {
+            width: 400px;
+            height: 80px;
+            color: #ccc;
+            line-height: 1.4;
+            background: rgba(68, 68, 68, 0.3);
+            padding: 2px;
+            border-radius: 2px;
+        }
+
+        .map-placeholder {
+            width: 120px;
+            height: 80px;
+            background: linear-gradient(135deg, #ff8c00 0%, #ff6b00 100%);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 12px;
+            text-align: center;
+            flex-shrink: 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            font-weight: 500;
+        }
+
+        .map-placeholder:hover {
+            background: linear-gradient(135deg, #ff6b00 0%, #ff8c00 100%);
+            border-color: #ffaa00;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(255, 140, 0, 0.3);
+        }
+
+        .embedded-map {
+            margin-top: 15px;
+            position: relative;
+            animation: slideDown 0.3s ease-out;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid #ff8c00;
+        }
+
+        .close-map-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #ff8c00;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            cursor: pointer;
+            font-size: 12px;
+            z-index: 10;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .close-map-btn:hover {
+            background: #ff6b00;
+            transform: scale(1.05);
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                max-height: 0;
+            }
+            to {
+                opacity: 1;
+                max-height: 250px;
+            }
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 1;
+                max-height: 250px;
+            }
+            to {
+                opacity: 0;
+                max-height: 0;
+            }
+        }
+
+        .embedded-map.closing {
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .activity-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid #444;
+        }
+
+        .activity-title {
+            font-size: 18px;
+            margin-bottom: 15px;
+            font-weight: 600;
+            color: #ff8c00;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .activity-title::before {
+            content: "📋";
+            font-size: 16px;
+        }
+
+        .activity-item {
+            margin-bottom: 10px;
+            color: #ccc;
+            font-size: 14px;
+            padding: 8px 12px;
+            background: rgba(68, 68, 68, 0.2);
+            border-radius: 6px;
+            border-left: 3px solid #ff8c00;
+            position: relative;
+        }
+
+        .activity-item::before {
+            content: "•";
+            color: #ff8c00;
+            font-weight: bold;
+            position: absolute;
+            left: -8px;
+            background: #1a1a1a;
+            padding: 0 4px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                padding: 15px;
+            }
+            
+            .location-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .map-placeholder {
+                width: 50%;
+                height: 60px;
+            }
+
+            .issue-meta {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="trafficSignal.jpeg" alt="Pothole on main road" class="issue-image">
+        
+        <div class="issue-header">
+            <h2 class="issue-title">Traffic Signal Malfunction</h2>
+            <div class="issue-meta">
+                <div class="timestamp">Jun 02, 2025 - 10:34 AM</div>
+                <div class="status">
+                    <div class="status-dot"></div>
+                    <span class="status-text">In Progress</span>
+                </div>
+            </div>
+            <div class="reporter">Reported by: Team-Zero</div>
+        </div>
+
+        <div class="description">
+            Traffic light system is malfunctioning causing confusion and potential accidents at this busy intersection.
+        </div>
+
+        <div class="location-section">
+            <div class="location-title">📍 Location</div>
+            <div class="location-info">
+                <div class="location-address">
+                    Samrat Colony, Giaspura,</br>
+                    Ludhiana,Punjab,</br>
+                    Pin Code : 141014
+                </div>
+                <div class="map-placeholder" id="mapButton">
+                    🗺️<br>
+                    View on Map
+                </div>
+            </div>
+            
+            <div id="embeddedMap" class="embedded-map" style="display: none;">
+                <iframe
+                    id="mapFrame"
+                    width="100%"
+                    height="200"
+                    frameborder="0"
+                    style="border: 0; border-radius: 6px;"
+                    allowfullscreen
+                    aria-hidden="false"
+                    tabindex="0">
+                </iframe>
+                <button id="closeMap" class="close-map-btn">Close Map</button>
+            </div>
+        </div>
+
+        <div class="activity-section">
+            <h3 class="activity-title">Activity</h3>
+            <div class="activity-item">Jun 02, 10:34 AM — Reported by user</div>
+            <div class="activity-item">July 26, 09:00 AM — Assigned to municipal worker</div>
+            <div class="activity-item">July 28, 04:15 PM — Marked "In Progress"</div>
+        </div>
+    </div>
+
+    <script>
+        // Map functionality for embedded map
+        function showMap() {
+            const mapButton = document.getElementById('mapButton');
+            const embeddedMap = document.getElementById('embeddedMap');
+            const mapFrame = document.getElementById('mapFrame');
+            
+            // Fixed location coordinates for C.G Road, Ahmedabad
+            const location = "C.G Road, Ahmedabad, Gujarat, India";
+            const encodedLocation = encodeURIComponent(location);
+            
+            // Use OpenStreetMap embed (no API key required)
+            const osmUrl = `https://www.openstreetmap.org/export/embed.html?bbox=72.5648,23.0258,72.5748,23.0358&layer=mapnik&marker=23.0308,72.5698`;
+            
+            // Set the iframe source
+            mapFrame.src = osmUrl;
+            
+            // Hide button and show map
+            mapButton.style.display = 'none';
+            embeddedMap.style.display = 'block';
+        }
+
+        function hideMap() {
+            const mapButton = document.getElementById('mapButton');
+            const embeddedMap = document.getElementById('embeddedMap');
+            
+            // Add closing animation
+            embeddedMap.classList.add('closing');
+            
+            setTimeout(() => {
+                embeddedMap.style.display = 'none';
+                embeddedMap.classList.remove('closing');
+                mapButton.style.display = 'flex';
+            }, 300);
+        }
+
+        // Add event listeners after DOM loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const mapButton = document.getElementById('mapButton');
+            const closeMapBtn = document.getElementById('closeMap');
+            
+            if (mapButton) {
+                mapButton.addEventListener('click', showMap);
+            }
+            
+            if (closeMapBtn) {
+                closeMapBtn.addEventListener('click', hideMap);
+            }
+        });
+
+        // Simulate real-time status updates
+        function updateStatus() {
+            const statusDot = document.querySelector('.status-dot');
+            const colors = ['#ff8c00', '#4caf50', '#f44336', '#2196f3'];
+            
+            if (Math.random() > 0.95) { // 5% chance to update status
+                statusDot.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            }
+        }
+
+        setInterval(updateStatus, 5000);
+    </script>
+</body>
+</html>

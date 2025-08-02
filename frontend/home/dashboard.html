@@ -413,7 +413,56 @@
             background: rgba(255, 255, 255, 0.9);
             color: #dc3545;
         }
+            body.modal-open {
+      overflow: hidden;
+    }
+     .modal-content::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+     }
 
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      width: 30%;
+      height: 80%;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      overflow: auto;
+      position: relative;
+      scrollbar-width: none; /* Firefox */
+
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      background: none;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
         .action-btn {
             width: 100%;
             padding: 12px;
@@ -594,7 +643,7 @@
                     <span class="action-link" id="my-issues-link">My Issues</span>
                     <span class="action-link" id="my-issues-link2">Report new Issue</span>
                     <button class="theme-toggle" onclick="toggleTheme()">☀️</button>
-                    <button class="logout-btn" onclick="logout()">⚙️</button>
+                    <button class="logout-btn" onclick="logout()">➥</button>
                 </div>
             </div>
         </header>
@@ -629,7 +678,12 @@
                 <button class="search-btn">🔍</button>
             </div>
         </div>
-
+           <div id="modal" class="modal">
+              <div class="modal-content">
+               <button class="close-btn" onclick="closeModal()">✖</button>
+               <iframe id="modalFrame" src=""></iframe>
+              </div>
+            </div>
         <div class="issues-grid">
             <!-- Streetlight Issue -->
             <div class="issue-card streetlight">
@@ -660,7 +714,7 @@
                         <span class="distance">1.1 km</span>
                         <span class="location">CG Road, Ahmedabad, Gujarat</span>
                     </div>
-                    <button class="action-btn">View Details</button>
+                    <button class="action-btn" onclick="openModal()">View Details</button>
                 </div>
             </div>
 
@@ -761,9 +815,9 @@
         }
 
         function logout() {
-            alert('Logout functionality would be implemented here');
+        localStorage.removeItem('token'); // Clear JWT or auth token
+         window.location.href = '../auth/auth.html'; // Redirect to login page        }
         }
-
         // Add some interactivity
         document.addEventListener('DOMContentLoaded', function() {
             // Filter functionality
@@ -864,6 +918,19 @@
                 });
             });
         });
+
+
+ function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('modalFrame').src = '../view-detail/issue-detail.html'; // load another page
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('modalFrame').src = '';
+      document.body.classList.remove('modal-open');
+    }
     </script>
 </body>
 </html>

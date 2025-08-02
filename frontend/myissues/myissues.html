@@ -192,7 +192,56 @@
             color: #28a745;
             border: 1px solid #28a745;
         }
+            body.modal-open {
+      overflow: hidden;
+    }
+     .modal-content::-webkit-scrollbar {
+        width: 0;
+        height: 0;
+     }
 
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      backdrop-filter: blur(6px);
+      background-color: rgba(0, 0, 0, 0.4);
+      z-index: 9999;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      width: 30%;
+      height: 80%;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+      overflow: auto;
+      position: relative;
+      scrollbar-width: none; /* Firefox */
+
+    }
+
+    .modal iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px; right: 15px;
+      font-size: 20px;
+      cursor: pointer;
+      background: none;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      border-radius: 5px;
+    }
         .no-issues {
             text-align: center;
             padding: 60px 20px;
@@ -293,7 +342,12 @@
             <h1>My Issues</h1>
             <p>Track and manage all the civic issues you've reported in your neighborhood</p>
         </div>
-
+                  <div id="modal" class="modal">
+              <div class="modal-content">
+               <button class="close-btn" onclick="closeModal()">✖</button>
+               <iframe id="modalFrame" src=""></iframe>
+              </div>
+            </div>
         <div class="issues-grid" id="issuesGrid">
             <!-- Road Maintenance Issue -->
             <div class="issue-card">
@@ -321,11 +375,10 @@
                         <span class="distance-badge">2.1 km</span>
                         <span class="location">Ellis Bridge, Ahmedabad, Gujarat</span>
                     </div>
-                    <button class="view-details-btn" onclick="viewDetails('traffic-signal')">View Details</button>
+                    <button class="view-details-btn" onclick="openModal()">View Details</button>
                 </div>
             </div>
 
-            <!-- Street Light Not Working -->
            
     </div>
 
@@ -394,14 +447,6 @@
             }
         ];
 
-        // Function to handle view details button click
-        function viewDetails(issueId) {
-            const issue = issuesData.find(item => item.id === issueId);
-            if (issue) {
-                alert(`Viewing details for: ${issue.title}\n\nStatus: ${issue.status.toUpperCase()}\nReported: ${issue.reportedDate}\nLocation: ${issue.location}\n\nDescription: ${issue.description}`);
-            }
-        }
-
         // Function to handle report new issue
         function reportNewIssue() {
             alert('Redirecting to Report New Issue page...');
@@ -440,6 +485,18 @@
             toggleEmptyState();
             console.log('My Issues page loaded successfully');
         });
+        
+ function openModal() {
+      document.getElementById('modal').style.display = 'flex';
+      document.getElementById('modalFrame').src = '../view-detail/myissue-detail.html'; // load another page
+      document.body.classList.add('modal-open');
+    }
+
+    function closeModal() {
+      document.getElementById('modal').style.display = 'none';
+      document.getElementById('modalFrame').src = '';
+      document.body.classList.remove('modal-open');
+    }
     </script>
 </body>
 </html>
