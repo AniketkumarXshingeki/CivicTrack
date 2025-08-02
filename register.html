@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicTrack - Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="logo">CivicTrack</div>
+            <div class="user-info">
+                <button class="home-btn" onclick="window.location.href='index.html'">Home</button>
+            </div>
+        </header>
+
+        <div class="register-container">
+            <div class="register-info">
+                <h2>User Registration Page</h2>
+                <p class="subtitle">Screen 3</p>
+            </div>
+
+            <div class="register-form-container">
+                <form class="register-form" id="registerForm">
+                    <div class="form-group">
+                        <label for="reg-username">User Name</label>
+                        <input type="text" id="reg-username" name="username" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reg-email">Email</label>
+                        <input type="email" id="reg-email" name="email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reg-phone">Phone</label>
+                        <input type="tel" id="reg-phone" name="phone" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" name="password" required>
+                    </div>
+                    
+                    <div class="form-links">
+                        <span>Already have an account?</span>
+                        <a href="login.html" class="login-link">Login</a>
+                    </div>
+                    
+                    <button type="submit" class="register-submit-btn">Register</button>
+                </form>
+            </div>
+
+            <div class="register-preview">
+                <div class="preview-issues">
+                    <div class="preview-issue">
+                        <img src="https://via.placeholder.com/80x60/4a5568/ffffff?text=Light" alt="Issue">
+                        <div class="preview-details">
+                            <h5>⚡ Streetlight not working</h5>
+                            <p>Street light not working since last 2 days</p>
+                            <span>2.8 km</span>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-issue">
+                        <img src="https://via.placeholder.com/80x60/718096/ffffff?text=Road" alt="Issue">
+                        <div class="preview-details">
+                            <h5>🕳️ Pothole on main road</h5>
+                            <p>Big pothole created obstruction</p>
+                            <span>1.1 km</span>
+                        </div>
+                    </div>
+                    
+                    <div class="preview-issue">
+                        <img src="https://via.placeholder.com/80x60/38a169/ffffff?text=Trash" alt="Issue">
+                        <div class="preview-details">
+                            <h5>🗑️ Garbage not collected</h5>
+                            <p>Garbage not collected issue</p>
+                            <span>1.7 km</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <span class="page-number active">1</span>
+                    <span class="page-number">2</span>
+                    <span class="page-number">3</span>
+                    <span class="page-number">4</span>
+                    <span class="page-dots">...</span>
+                    <span class="page-number">11</span>
+                    <span class="page-nav">›</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
